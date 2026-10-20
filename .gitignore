@@ -1,0 +1,29 @@
+# Archivos de Claude (no van al repositorio)
+CLAUDE.md
+Claude.md
+.claude/
+
+# Secretos
+appsettings.Development.json
+.env
+.env.*
+*.pfx
+
+# .NET
+bin/
+obj/
+*.user
+*.suo
+.vs/
+TestResults/
+
+# Node / React
+node_modules/
+dist/
+*.log
+
+# IDE y sistema
+.vscode/
+.idea/
+Thumbs.db
+.DS_Store
