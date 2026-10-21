@@ -10,7 +10,8 @@ Aplicación web para controlar el inventario de productos: registro de entradas 
 - Inventario actual mediante una **función** de PostgreSQL, con alerta visual de **stock bajo**.
 - Historial de movimientos con filtros por producto y tipo.
 - Manejo global de errores en la API (respuestas JSON uniformes con el código HTTP correcto) y mensajes claros en el frontend.
-- Diseño responsivo con Bootstrap 5.
+- Diseño responsivo con Bootstrap 5 (en móvil se ocultan las columnas secundarias de las tablas).
+- Extras más allá de los requisitos: alerta de stock bajo, tarjetas resumen con el valor del inventario, buscador, validaciones en cliente y servidor, y Swagger con soporte para JWT.
 
 ## Tecnologías
 
@@ -89,6 +90,9 @@ Abre `http://localhost:5173`, crea una cuenta con **Registrarme** y entra. Si tu
 - **Procedures para escribir y función para leer:** en PostgreSQL un `PROCEDURE` ejecuta acciones (`CALL`), mientras que una `FUNCTION` puede devolver una tabla (`SELECT`).
 - **`FOR UPDATE` en las salidas:** bloquea la fila del producto para que dos salidas simultáneas no dejen el stock mal calculado.
 - **Sin migraciones de EF:** el esquema lo definen los scripts SQL de `database/`.
+- **Historial con `producto_id`:** los movimientos solo guardan el id del producto, así que si se edita el nombre, el historial muestra el nombre actual.
+- **Observación opcional:** al registrar un movimiento la observación no es obligatoria a propósito, para agilizar la captura.
+- **Rutas del frontend:** el inventario es la ruta `/`; `/inventario` redirige a `/`.
 - **Errores:** los `RAISE EXCEPTION` de los procedures llegan como HTTP 400, los duplicados como 409 y los fallos inesperados como 500 sin exponer detalles internos.
 
 ## Flujo de trabajo con Git
@@ -104,6 +108,10 @@ Ramas `main` (estable), `develop` (integración) y `feature/phase-N-descripcion`
 | Error de stock insuficiente (viene del stored procedure) | Vista móvil |
 |---|---|
 | ![Movimientos](docs/capturas/03-movimientos-error-stock.jpg) | ![Móvil](docs/capturas/04-inventario-movil.jpg) |
+
+**Swagger con sesión autorizada** (respuesta 200 de `GET /api/inventario`, que usa la función SQL):
+
+![Swagger](docs/capturas/05-swagger-autorizado.png)
 
 ## Mejoras futuras
 
