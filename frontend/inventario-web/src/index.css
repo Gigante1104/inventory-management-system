@@ -1,0 +1,16 @@
+body {
+  background-color: #f4f6f9;
+}
+
+.tarjeta-resumen {
+  border: 0;
+  border-left: 4px solid var(--bs-primary);
+}
+
+.tarjeta-resumen.alerta {
+  border-left-color: var(--bs-danger);
+}
+
+.login-contenedor {
+  max-width: 420px;
+}
