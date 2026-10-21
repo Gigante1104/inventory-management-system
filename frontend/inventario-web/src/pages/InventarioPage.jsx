@@ -52,12 +52,12 @@ export default function InventarioPage() {
           <table className="table table-hover align-middle mb-0">
             <thead className="table-light">
               <tr>
-                <th>Código</th>
+                <th className="text-nowrap">Código</th>
                 <th>Producto</th>
-                <th className="text-end">Precio</th>
+                <th className="text-end d-none d-md-table-cell">Precio</th>
                 <th className="text-end">Stock</th>
-                <th className="text-end">Mínimo</th>
-                <th className="text-end">Valor</th>
+                <th className="text-end d-none d-md-table-cell">Mínimo</th>
+                <th className="text-end d-none d-md-table-cell">Valor</th>
                 <th>Estado</th>
               </tr>
             </thead>
@@ -68,12 +68,12 @@ export default function InventarioPage() {
               )}
               {filtrados.map((i) => (
                 <tr key={i.id}>
-                  <td>{i.codigo}</td>
+                  <td className="text-nowrap">{i.codigo}</td>
                   <td>{i.nombre}</td>
-                  <td className="text-end">{moneda(i.precio)}</td>
+                  <td className="text-end d-none d-md-table-cell">{moneda(i.precio)}</td>
                   <td className="text-end fw-semibold">{i.stockActual}</td>
-                  <td className="text-end">{i.stockMinimo}</td>
-                  <td className="text-end">{moneda(i.valorTotal)}</td>
+                  <td className="text-end d-none d-md-table-cell">{i.stockMinimo}</td>
+                  <td className="text-end d-none d-md-table-cell">{moneda(i.valorTotal)}</td>
                   <td>
                     {i.bajoStock
                       ? <span className="badge text-bg-danger">Stock bajo</span>
