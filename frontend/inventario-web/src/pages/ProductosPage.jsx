@@ -18,6 +18,11 @@ export default function ProductosPage() {
 
   useEffect(() => { cargar() }, [])
 
+  // Cuando aparece un mensaje, sube al inicio para que se vea aunque la acción fuera abajo (en la tabla)
+  useEffect(() => {
+    if (error || exito) window.scrollTo({ top: 0, behavior: 'smooth' })
+  }, [error, exito])
+
   const cambiar = (e) => setForm({ ...form, [e.target.name]: e.target.value })
 
   const cancelar = () => {
@@ -131,9 +136,9 @@ export default function ProductosPage() {
           <table className="table table-hover align-middle mb-0">
             <thead className="table-light">
               <tr>
-                <th>Código</th>
+                <th className="text-nowrap">Código</th>
                 <th>Nombre</th>
-                <th className="text-end">Precio</th>
+                <th className="text-end d-none d-md-table-cell">Precio</th>
                 <th className="text-end">Stock</th>
                 <th className="text-end">Acciones</th>
               </tr>
@@ -144,9 +149,9 @@ export default function ProductosPage() {
               )}
               {productos.map((p) => (
                 <tr key={p.id}>
-                  <td>{p.codigo}</td>
+                  <td className="text-nowrap">{p.codigo}</td>
                   <td>{p.nombre}</td>
-                  <td className="text-end">{p.precio.toLocaleString('es-CO')}</td>
+                  <td className="text-end d-none d-md-table-cell">{p.precio.toLocaleString('es-CO')}</td>
                   <td className="text-end">{p.stockActual}</td>
                   <td className="text-end text-nowrap">
                     <button className="btn btn-sm btn-outline-primary me-2" onClick={() => editar(p)}>Editar</button>
