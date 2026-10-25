@@ -1,6 +1,6 @@
 # Sistema de Gestión de Inventario
 
-Aplicación web para controlar el inventario de productos: registro de entradas y salidas, consulta del stock actual e historial de movimientos. Prueba técnica con **API REST en C# (.NET 10)**, **PostgreSQL** y **frontend en React**.
+Aplicación web para controlar el inventario de productos: registro de entradas y salidas, consulta del stock actual e historial de movimientos.Proyecto de práctica con **API REST en C# (.NET 10)**, **PostgreSQL** y **frontend en React**.
 
 ## Características
 
@@ -11,7 +11,7 @@ Aplicación web para controlar el inventario de productos: registro de entradas 
 - Historial de movimientos con filtros por producto y tipo.
 - Manejo global de errores en la API (respuestas JSON uniformes con el código HTTP correcto) y mensajes claros en el frontend.
 - Diseño responsivo con Bootstrap 5 (en móvil se ocultan las columnas secundarias de las tablas).
-- Extras más allá de los requisitos: alerta de stock bajo, tarjetas resumen con el valor del inventario, buscador, validaciones en cliente y servidor, y Swagger con soporte para JWT.
+- Funcionalidades adicionales: alerta de stock bajo, tarjetas resumen con el valor del inventario, buscador, validaciones en cliente y servidor, y Swagger con soporte para JWT.
 
 ## Tecnologías
 
