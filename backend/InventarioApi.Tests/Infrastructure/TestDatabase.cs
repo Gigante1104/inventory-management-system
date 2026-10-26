@@ -22,13 +22,17 @@ public static class TestDatabase
             ?? throw new InvalidOperationException(
                 "Falta TestDb:ConnectionString. Configúrala con 'dotnet user-secrets set' en el proyecto de pruebas.");
 
-        // Protección: nunca correr las pruebas contra una base que no sea de pruebas
-        var nombreBase = new NpgsqlConnectionStringBuilder(conexion).Database;
+            ExigirBaseDePruebas(conexion);
+        return conexion;
+    }
+
+    // Protección: nunca correr las pruebas contra una base que no sea de pruebas
+    public static void ExigirBaseDePruebas(string? conexion)
+    {
+        var nombreBase = conexion is null ? null : new NpgsqlConnectionStringBuilder(conexion).Database;
         if (nombreBase is null || !nombreBase.EndsWith("_test", StringComparison.OrdinalIgnoreCase))
             throw new InvalidOperationException(
                 $"La base '{nombreBase}' no termina en '_test'. Las pruebas se niegan a correr para proteger tus datos.");
-
-        return conexion;
     }
 
     // Ejecuta 01_tablas.sql y 02_funciones_procedimientos.sql (se pueden repetir sin problema)
