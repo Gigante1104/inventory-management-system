@@ -1,6 +1,6 @@
 # Sistema de Gestión de Inventario
 
-Aplicación web para controlar el inventario de productos: registro de entradas y salidas, consulta del stock actual e historial de movimientos. Prueba técnica con **API REST en C# (.NET 10)**, **PostgreSQL** y **frontend en React**.
+Aplicación web para controlar el inventario de productos: registro de entradas y salidas, consulta del stock actual e historial de movimientos.Proyecto de práctica con **API REST en C# (.NET 10)**, **PostgreSQL** y **frontend en React**.
 
 ## Características
 
@@ -11,7 +11,7 @@ Aplicación web para controlar el inventario de productos: registro de entradas 
 - Historial de movimientos con filtros por producto y tipo.
 - Manejo global de errores en la API (respuestas JSON uniformes con el código HTTP correcto) y mensajes claros en el frontend.
 - Diseño responsivo con Bootstrap 5 (en móvil se ocultan las columnas secundarias de las tablas).
-- Extras más allá de los requisitos: alerta de stock bajo, tarjetas resumen con el valor del inventario, buscador, validaciones en cliente y servidor, y Swagger con soporte para JWT.
+- Funcionalidades adicionales: alerta de stock bajo, tarjetas resumen con el valor del inventario, buscador, validaciones en cliente y servidor, y Swagger con soporte para JWT.
 
 ## Tecnologías
 
@@ -26,6 +26,7 @@ Aplicación web para controlar el inventario de productos: registro de entradas 
 ```
 ├─ database/                  Scripts SQL (tablas, procedures/función, datos de prueba)
 ├─ backend/InventarioApi/     API: Controllers, Services, Data, Models, DTOs, Middleware, Exceptions
+├─ backend/InventarioApi.Tests/  Pruebas de integración (xUnit) contra una base separada
 ├─ frontend/inventario-web/   Aplicación React (api, context, components, pages)
 └─ docs/capturas/             Capturas de pantalla
 ```
@@ -83,6 +84,45 @@ Abre `http://localhost:5173`, crea una cuenta con **Registrarme** y entra. Si tu
 | POST | `/api/inventario/entrada` | Registrar entrada (procedure) | Sí |
 | POST | `/api/inventario/salida` | Registrar salida (procedure) | Sí |
 | GET | `/api/inventario/movimientos?productoId=&tipo=` | Historial con filtros | Sí |
+
+## Pruebas
+
+El proyecto incluye pruebas de integración con **xUnit** y `Microsoft.AspNetCore.Mvc.Testing` en `backend/InventarioApi.Tests`. Arrancan la API real en memoria y la prueban por HTTP contra una **base PostgreSQL separada** (`inventario_test`), de modo que también se ejercitan los procedimientos almacenados reales.
+
+### Preparación (una sola vez)
+
+1. En pgAdmin crea una base de datos vacía llamada `inventario_test`.
+2. Guarda la conexión en los *User Secrets* del proyecto de pruebas (reemplaza `TU_CLAVE`):
+
+```bash
+dotnet user-secrets set "TestDb:ConnectionString" "Host=localhost;Port=5432;Database=inventario_test;Username=postgres;Password=TU_CLAVE" --project backend/InventarioApi.Tests
+```
+
+También puede usarse la variable de entorno `TestDb__ConnectionString`.
+
+Las pruebas aplican por sí solas `database/01_tablas.sql` y `database/02_funciones_procedimientos.sql` sobre esa base. **Se niegan a correr si el nombre de la base no termina en `_test`**, para no tocar nunca los datos de desarrollo. La clave JWT de las pruebas se genera al azar en memoria, así que no hay secretos que guardar.
+
+### Ejecutar
+
+```bash
+dotnet test backend/InventarioApi.Tests
+```
+
+### Qué se prueba (9 pruebas)
+
+| Área | Prueba |
+|---|---|
+| Autenticación | Login con contraseña incorrecta devuelve 401 |
+| Autenticación | `GET /api/productos` sin token devuelve 401 |
+| Autenticación | Registro y login devuelven un token JWT |
+| Validación | Crear un producto con datos inválidos devuelve 400 |
+| Inventario | Una entrada aumenta el stock |
+| Inventario | Una salida mayor al stock devuelve 400 (mensaje del procedimiento) y el stock no cambia |
+| Inventario | Una salida por el stock exacto deja el stock en 0 |
+| Concurrencia | Dos salidas simultáneas por la última unidad: solo una tiene éxito |
+| Bloqueo | Con la fila bloqueada, la salida espera y luego ve el stock actualizado (comprueba `FOR UPDATE`) |
+
+Cada prueba crea sus propios datos con nombres únicos, por lo que no hace falta limpiar la base entre ejecuciones.
 
 ## Decisiones de diseño
 
