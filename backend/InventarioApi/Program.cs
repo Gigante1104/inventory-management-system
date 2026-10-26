@@ -87,3 +87,6 @@ app.UseAuthorization();  // ¿tienes permiso?
 app.MapControllers();
 
 app.Run();
+
+// Hace pública la clase Program para que el proyecto de pruebas pueda arrancar la API
+public partial class Program { }
